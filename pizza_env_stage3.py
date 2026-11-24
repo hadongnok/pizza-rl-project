@@ -8,7 +8,7 @@ import numpy as np
 
 class PizzaKitchenStage3Env(gym.Env):
     """
-    Stage 3 Pizza Kitchen environment.
+    Stage 3 Pizza Kitchen environment (FIFO Order Processing).
 
     Menu codes:
         0: empty order slot
@@ -92,7 +92,6 @@ class PizzaKitchenStage3Env(gym.Env):
         self.action_space = spaces.Discrete(7)
 
         # Five binary ingredient flags, then (menu, remaining_time) per order.
-        # Menu radix is 5: 0 means empty, 1..4 are the four pizza types.
         self.radices = (2, 2, 2, 2, 2) + (
             (5, self.max_deadline + 1) * self.n_orders
         )
@@ -207,8 +206,6 @@ class PizzaKitchenStage3Env(gym.Env):
             "idle_actions": 0,
         }
 
-        # Deterministic setup for tests:
-        # options={"orders": [(menu_code, deadline), ...]}
         fixed_orders = None if options is None else options.get("orders")
 
         if fixed_orders is not None:
@@ -272,11 +269,8 @@ class PizzaKitchenStage3Env(gym.Env):
             ]
 
             if matching_orders:
-                # Serve the matching order with the shortest remaining deadline.
-                slot = min(
-                    matching_orders,
-                    key=lambda i: (self.orders[i][1], i),
-                )
+                # FIFO 핵심 변경: 남은 마감 시간 정렬을 제거하고 가장 앞쪽 인덱스(가장 먼저 들어온 주문)를 선택
+                slot = min(matching_orders)
                 self.orders[slot] = [0, 0]
                 self.stats["served"] += 1
                 reward += 20.0
@@ -292,11 +286,8 @@ class PizzaKitchenStage3Env(gym.Env):
                 self.stats["wrong_serves"] += 1
                 event = "wrong_serve"
 
-            # A serve attempt always clears the plate, matching Stage 1/2.
             self.plate = [0, 0, 0, 0, 0]
 
-        # Decrease deadlines after the action.
-        # A serve on the last available tick is counted before expiration.
         for order in self.orders:
             if order[0] != 0:
                 order[1] -= 1
