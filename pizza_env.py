@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from typing import Optional
@@ -138,7 +137,7 @@ class PizzaKitchenEnv(gym.Env):
             matching = [i for i, (menu, _) in enumerate(self.orders)
                         if menu != 0 and menu == served_menu]
             if matching:
-                slot = min(matching, key=lambda i: (self.orders[i][1], i))
+                slot = min(matching)
                 self.orders[slot] = [0, 0]
                 self.stats["served"] += 1
                 reward += 20.0
