@@ -42,5 +42,5 @@ S=(d,c,p,m1,t1,m2,t2,m3,t3,m4,t4)
 ===코드 역할 분담===
 Kitchen env & Q-Learning -> 이하은
 DQN -> 원유리
-REINFORCE, A3C -> 심민진
+REINFORCE, actor-critic -> 심민진
 Kitchen env 기반으로 하되, 각자의 알고리즘에 맞게 변형
