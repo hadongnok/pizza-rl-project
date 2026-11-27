@@ -1,0 +1,8 @@
+Evaluation Metric,Value
+Total Evaluation Episodes,"1,000"
+Average Reward (Return),46.66
+Order Completion Rate (%),74.85%
+Average Served Orders (Max 4),2.99 / 4.0
+Average Expired Orders,1.01
+Average Wrong Serves,0.06
+Average Steps per Episode,14.63
