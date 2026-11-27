@@ -13,6 +13,25 @@ DQN
 REINFORCE
 Actor-Critic
 [3. 종합 비교 & 결론] 
-알고리즘 성능 비교 종합
-최적 알고리즘 선정 & 결론
+알고리즘 성능 비교 종합(Q-Learning vs DQN vs REINFORCE vs Actor-Critic)
+최적 알고리즘 선정 & 성과 요약
+현재 모델의 한계 및 차후 발전 방향
 Q&A / 마무리 슬라이드
+
+===차후 발전 방향===
+[현재 방식의 한계점: Strict Global FIFO의 비효율성]
+• 순차적 대기열 처리(Strict Global FIFO) 방식으로 인해 물리적 조리 시간 병목 발생
+• 예시) [치즈 - 치즈 - 페퍼로니 - 치즈] 주문 순서 시:
+  - 3번 슬롯(페퍼로니)은 조리 시간(3스텝)이 부족해 만료(Expired) 위험이 높음
+  - 4번 슬롯(치즈)은 조리 시간(2스텝)이 충분함에도 FIFO 제약에 막혀 조리 불가
+
+[차기 프로젝트 개선 방안: EDF 기반 Dynamic Task Scheduling]
+• EDF(Earliest Deadline First) 및 가용 시간 기반의 동적 주문 처리 알고리즘 도입
+  1) 선두 주문 조리 시 실수 발생 시, 대기열 내 대체 가능한 동일 메뉴 우선 차용
+  2) 남은 시간(Remaining Deadline) 계산을 통한 조리 여부 실시간 판단
+     - "시간이 부족한 긴급/복잡 주문" 포기 ➔ "남은 시간 내 완수 가능한 주문" 즉시 전환
+  3) 타임아웃 만료(Expired) 건수를 최소화하여 전체 Order Completion Rate 극대화
+
+[기대 효과 & 비전]
+• 엄격한 순서 제약 해제를 통해 시스템 전체의 자원 활용률(Resource Utilization) 최적화
+• 현 80%+ 완수율 대비 추가적인 성능 향상(90%+ 이상) 달성 기대
